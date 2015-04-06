@@ -1,0 +1,18 @@
+.card {
+  width: 60px;
+  height: 84px;
+}
+
+.player {
+  padding-left: 30px;
+}
+
+.matches {
+  overflow: scroll;
+}
+
+.match {
+  border: 1px solid black;
+  margin-top: 3px;
+  margin-right: 3px;
+}
