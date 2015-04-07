@@ -1,55 +1,92 @@
 // function that shuffles the deck and set it to the parameter
 var shuffle = function() {
+  var cards = [];
   for (var i = 0; i < params.num; i++) {
-    var card = i % 13 + 1;
+    var name = i % 13 + 1;
     if (i % 4 === 0) {
-      card += '-clubs';
+      name += '-clubs';
     }
     if (i % 4 === 1) {
-      card += '-diamonds';
+      name += '-diamonds';
     }
     if (i % 4 === 2) {
-      card += '-hearts';
+      name += '-hearts';
     }
     if (i % 4 === 3) {
-      card += '-spades';
+      name += '-spades';
     }
-    params.cards.push(card);
+    cards.push({
+      id: null,
+      name: name
+    });
   }
-  return _.shuffle(params.cards);
+  var shuffled = _.shuffle(cards);
+  _.each(shuffled, function(card, index) {
+    card.id = index;
+  });
+  return cards;
 };
 
-var flip = function() {
-  if (params.canFlip ) {
-    var $img = $(this);
-    var id = $img.data('id');
-    var card = params.cards[id]; // e.g. '11-hearts'
-    var rank = parseInt(card.split('-')[0]);
-    if (rank === 1 || rank > 10) {
-      card = cardMap[rank] + '-' + card.split('-')[1];
+var getCardWithId = function(id) {
+  var cards = params.cards;
+  var index = 0;
+  _.each(cards, function(card, i) {
+    if (card.id === id) {
+      index = i;
     }
-    if (params.current.rank === 0) {
-      params.current.rank = rank;
-      params.current.img = $img;
+  });
+  return params.cards[index];
+};
+
+var removePair = function(first, second) {
+  var cards = params.cards;
+  _.each(cards, function(card, i) {
+    if (card.id === first || card.id === second) {
+      cards.splice(i, 1);
+    }
+  });
+};
+
+var flip = function($img, callback) {
+  var id = $img.data('id');
+  var card = getCardWithId(id).name; // e.g. '11-hearts'
+  var rank = parseInt(card.split('-')[0]); // e.g. 11
+  if (rank === 1 || rank > 10) {
+    card = cardMap[rank] + '-' + card.split('-')[1]; // 11-hearts => jack-hearts
+  }
+  if (params.current.rank === 0) {
+    setCurrentParams(id, rank, $img);
+    $img.attr('src', 'img/cards/' + card + '.png');
+  } else {
+    if (id !== params.current.img.data('id')) {
+      params.canFlip = false;
       $img.attr('src', 'img/cards/' + card + '.png');
-    } else {
-      if (id !== params.current.img.data('id')) {
-        params.canFlip = false;
-        $img.attr('src', 'img/cards/' + card + '.png');
-        setTimeout(function() {
-          unflip([$img, params.current.img], rank === params.current.rank);
-        }, 500);
-      }
+      setTimeout(function() {
+        var match = rank === params.current.rank;
+        unflip([$img, params.current.img], match);
+        if (callback) {
+          callback(match);
+        }
+      }, 500);
     }
   }
 };
 
 var unflip = function(imgs, match) {
   if (match) {
-    params.found += 1;
     params.num -= 2;
-    appendPair(imgs);
-    updateView();
+    var id1 = imgs[0].data('id');
+    var id2 = imgs[1].data('id');
+    removePair(id1, id2);
+    if (params.playerTurn) {
+      params.playerFound += 1;
+      updateView(false);
+      appendPair(imgs);
+    } else {
+      params.computerFound += 1;
+      updateView(true);
+      appendPair(imgs, true);
+    }
   }
   _.each(imgs, function(img) {
     if (match) {
@@ -59,7 +96,6 @@ var unflip = function(imgs, match) {
       img.attr('src', 'img/card-back.png');
     }
   });
-  params.current.img = null;
-  params.current.rank = 0;
+  setCurrentParams(0, 0, null);
   params.canFlip = true;
 };

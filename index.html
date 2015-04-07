@@ -6,17 +6,28 @@
 </head>
 <body>
   <nav class="navbar navbar-default">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Card Match</a>
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Card Match By Shin Uesugi</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li>
+          <p class="navbar-btn">
+            <a href="#" class="single btn btn-default">Single Player</a>
+            <a href="#" class="ai btn btn-default">Versus AI</a>
+            <a href="#" class="reset btn btn-default">Reset</a>
+          </p>
+        </li>
+      </ul>
     </div>
   </nav>
   <div class="row">
     <div class="player col-md-2">
       <b>Player</b><br>
-      Found: <span class="found">0</span> pairs<br>
+      Current mode: <span class="mode">Single Player</span><br>
       <span class="remaining">52</span> cards remaining<br>
-      <button class="reset">Reset</button>
-      <div class="matches">Matched:</div>
+      Found: <span class="found">0</span> pairs<br>
+      Matched: <div class="matches"></div>
     </div>
     <div class="col-md-8">
       <table border="0" cellspacing="10" align="center">
@@ -27,8 +38,7 @@
     <div class="computer col-md-2">
       <b>Computer</b><br>
       Found: <span class="found">0</span> pairs<br>
-      <span class="remaining">52</span> cards remaining<br>
-      <div class="matches">Matched:</div>
+      Matched:<div class="matches"></div>
     </div>
   </div>
 
@@ -36,8 +46,10 @@
   <script src="lib/underscore.js"></script>
   <script src="src/cardMap.js"></script>
   <script src="src/params.js"></script>
+  <script src="src/viewHandler.js"></script>
   <script src="src/cardHandler.js"></script>
-  <script src="src/view.js"></script>
+  <script src="src/singleHandler.js"></script>
+  <script src="src/botHandler.js"></script>
   <script src="src/main.js"></script>
 </body>
 </html>

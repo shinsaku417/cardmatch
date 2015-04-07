@@ -10,18 +10,27 @@ var makeBoard = function() {
   }
 };
 
-var updateView = function() {
-  var $found = $('.found');
+var updateView = function(computer) {
+  if (computer) {
+    var $found = $('.computer').find('.found');
+    $found.text(params.computerFound);
+  } else {
+    var $found = $('.player').find('.found');
+    $found.text(params.playerFound);
+  }
   var $remaining = $('.remaining');
-  $found.text(params.found);
   $remaining.text(params.num);
   if (params.num === 0) {
     alert('You found all pairs!');
   }
 };
 
-var appendPair = function(imgs) {
-  var $matches = $('.matches');
+var appendPair = function(imgs, computer) {
+  if (computer) {
+    var $matches = $('.computer').find('.matches');
+  } else {
+    var $matches = $('.player').find('.matches');
+  }
   $matches.append('<div>')
   _.each(imgs, function(img) {
     var $clone = img.clone();
