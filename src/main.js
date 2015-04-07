@@ -3,21 +3,24 @@ $(function() {
     updateView();
     makeBoard();
     params.cards = shuffle();
+    // add click events to the cell based on the mode
     _.each($('img'), function(cell) {
       var $cell = $(cell);
       if (params.computer) {
-        $cell.click(playerFlip);
+        $cell.click(vsBotFlip);
       } else {
         $cell.click(singlePlayerFlip);
       }
     });
   };
 
+  // add functionalities to menu buttons
   var setButtons = function() {
     var reset = function() {
       $('tbody').empty();
-      $('.matches').empty();
+      $('.pairs').empty();
       resetParams();
+      resetMemory();
       init();
     };
 
@@ -37,6 +40,7 @@ $(function() {
     });
   };
 
+  // when the page is loaded, initialize and add functionalities to buttons
   init();
   setButtons();
 

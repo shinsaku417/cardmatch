@@ -1,3 +1,4 @@
+// makes a board and appends it to tbody
 var makeBoard = function() {
   var $tbody = $('tbody');
 
@@ -10,32 +11,56 @@ var makeBoard = function() {
   }
 };
 
+// updates a view for
+// # of pairs player found
+// # of pairs computer found
+// remaining # of cards
 var updateView = function(computer) {
-  if (computer) {
-    var $found = $('.computer').find('.found');
-    $found.text(params.computerFound);
-  } else {
-    var $found = $('.player').find('.found');
-    $found.text(params.playerFound);
-  }
+  var $playerFound = $('.player').find('.found');
+  $playerFound.text(params.playerFound);
+
+  var $compFound = $('.computer').find('.found');
+  $compFound.text(params.computerFound);
+
   var $remaining = $('.remaining');
   $remaining.text(params.num);
+
   if (params.num === 0) {
-    alert('You found all pairs!');
+    finish();
   }
 };
 
+// append pair of cards that are matched
 var appendPair = function(imgs, computer) {
   if (computer) {
-    var $matches = $('.computer').find('.matches');
+    var $pairs = $('.computer').find('.pairs');
   } else {
-    var $matches = $('.player').find('.matches');
+    var $pairs = $('.player').find('.pairs');
   }
-  $matches.append('<div>')
+  $pairs.append('<div>')
   _.each(imgs, function(img) {
     var $clone = img.clone();
-    $clone.addClass('match');
-    $matches.append($clone);
+    $clone.addClass('pair');
+    $pairs.append($clone);
   });
-  $matches.append('</div>');
+  $pairs.append('</div>');
+};
+
+// handles the case when the game is finished
+var finish = function() {
+  if (params.computer) {
+    var player = params.playerFound;
+    var computer = params.computerFound;
+    if (player > computer) {
+      var message = 'You Win!';
+    } else if (player < computer) {
+      var message = 'You Lose!';
+    } else {
+      var message = 'Tie!';
+    }
+    alert('You found ' + player + ' pairs while computer found ' + computer + ' pairs. ' + message);
+  } else {
+    alert('You found all pairs!');
+  }
+  params.playerTurn = true;
 };

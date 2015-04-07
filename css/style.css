@@ -1,18 +1,22 @@
 .card {
+  border: 1px solid black;
   width: 60px;
   height: 84px;
+}
+
+.card.blank {
+  border: 0px;
+}
+
+.pair {
+  margin-top: 3px;
+  margin-right: 3px;
 }
 
 .player {
   padding-left: 30px;
 }
 
-.matches {
-  overflow: scroll;
-}
-
-.match {
-  border: 1px solid black;
-  margin-top: 3px;
-  margin-right: 3px;
+td {
+  padding: 5px;
 }
